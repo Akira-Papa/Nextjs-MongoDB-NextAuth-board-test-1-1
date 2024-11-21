@@ -1,0 +1,38 @@
+modules = ["nodejs-20"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Next.js App"
+
+[[workflows.workflow]]
+name = "Next.js App"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npx next dev"
+waitForPort = 3000
+
+[deployment]
+run = ["sh", "-c", "npx next dev"]
+
+[[ports]]
+localPort = 3000
+externalPort = 80
